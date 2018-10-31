@@ -8,12 +8,15 @@
 #include <boost/assert.hpp>
 #include "consensus/yac/impl/yac_crypto_provider_impl.hpp"
 #include "consensus/yac/transport/impl/network_impl.hpp"
+#include "consensus/yac/transport/yac_network_interface.hpp"
 #include "consensus/yac/yac_crypto_provider.hpp"
 #include "cryptography/crypto_provider/crypto_defaults.hpp"
 #include "cryptography/default_hash_provider.hpp"
 #include "cryptography/keypair.hpp"
-#include "framework/integration_framework/fake_peer/ordering_gate_network_notifier.hpp"
-#include "framework/integration_framework/fake_peer/ordering_service_network_notifier.hpp"
+#include "framework/integration_framework/fake_peer/network/mst_network_notifier.hpp"
+#include "framework/integration_framework/fake_peer/network/ordering_gate_network_notifier.hpp"
+#include "framework/integration_framework/fake_peer/network/ordering_service_network_notifier.hpp"
+#include "framework/integration_framework/fake_peer/network/yac_network_notifier.hpp"
 #include "framework/result_fixture.hpp"
 #include "interfaces/common_objects/common_objects_factory.hpp"
 #include "main/server_runner.hpp"
@@ -87,11 +90,13 @@ namespace integration_framework {
                                                     async_call_)),
         og_transport_(
             std::make_shared<OgTransport>(real_peer_->address(), async_call_)),
+        mst_network_notifier_(std::make_shared<MstNetworkNotifier>()),
         yac_network_notifier_(std::make_shared<YacNetworkNotifier>()),
         os_network_notifier_(std::make_shared<OsNetworkNotifier>()),
         og_network_notifier_(std::make_shared<OgNetworkNotifier>()),
         yac_crypto_(std::make_shared<iroha::consensus::yac::CryptoProviderImpl>(
             *keypair_, common_objects_factory)) {
+    mst_transport_->subscribe(mst_network_notifier_);
     yac_transport_->subscribe(yac_network_notifier_);
     os_transport_->subscribe(os_network_notifier_);
     og_transport_->subscribe(og_network_notifier_);
@@ -127,11 +132,6 @@ namespace integration_framework {
             [this](const auto &err) { log_->error("coul not start server!"); });
   }
 
-  void FakePeer::subscribeForMstNotifications(
-      std::shared_ptr<iroha::network::MstTransportNotification> notification) {
-    return mst_transport_->subscribe(notification);
-  }
-
   std::string FakePeer::getAddress() const {
     return listen_ip_ + ":" + std::to_string(internal_port_);
   }
@@ -140,7 +140,12 @@ namespace integration_framework {
     return *keypair_;
   }
 
-  rxcpp::observable<FakePeer::YacStatePtr> FakePeer::get_yac_states_observable() {
+  rxcpp::observable<FakePeer::MstMessagePtr>
+  FakePeer::get_mst_states_observable() {
+    return mst_network_notifier_->get_observable();
+  }
+
+  rxcpp::observable<YacStateMessage> FakePeer::get_yac_states_observable() {
     return yac_network_notifier_->get_observable();
   }
 
@@ -198,7 +203,7 @@ namespace integration_framework {
     yac_transport_->sendState(*real_peer_, state);
   }
 
-  void FakePeer::voteForTheSame(const FakePeer::YacStatePtr &incoming_votes) {
+  void FakePeer::voteForTheSame(const FakePeer::YacMessagePtr &incoming_votes) {
     using iroha::consensus::yac::VoteMessage;
     log_->debug("Got a YAC state message with {} votes.",
                 incoming_votes->size());
