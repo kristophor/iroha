@@ -64,6 +64,7 @@ using AlwaysValidProtoTransactionValidator =
         iroha::protocol::Transaction>;
 using AlwaysMissingTxPresenceCache = iroha::ametsuchi::TxPresenceCacheStub<
     iroha::ametsuchi::tx_cache_status_responses::Missing>;
+using FakePeer = integration_framework::fake_peer::FakePeer;
 
 namespace {
   std::string kLocalHost = "127.0.0.1";
