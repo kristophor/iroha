@@ -61,12 +61,14 @@ namespace integration_framework {
   class OsNetworkNotifier;
   class OgNetworkNotifier;
   class YacNetworkNotifier;
+  class FakePeerBehaviour;
 
   /**
    * A lightweight implementation of iroha peer network interface for inter-peer
    * communications testing.
    */
-  class FakePeer final : public boost::noncopyable {
+  class FakePeer final : public boost::noncopyable,
+                         public std::enable_shared_from_this<FakePeer> {
    public:
     using TransportFactoryType =
         shared_model::interface::AbstractTransportFactory<
@@ -105,6 +107,9 @@ namespace integration_framework {
         std::shared_ptr<shared_model::interface::TransactionBatchFactory>
             transaction_batch_factory,
         std::shared_ptr<iroha::ametsuchi::TxPresenceCache> tx_presence_cache);
+
+    /// Assign the given behaviour to this fake peer.
+    FakePeer &setBehaviour(const std::shared_ptr<FakePeerBehaviour> &behaviour);
 
     /// Start the fake peer.
     void run();
@@ -190,6 +195,8 @@ namespace integration_framework {
     std::unique_ptr<ServerRunner> internal_server_;
 
     std::shared_ptr<iroha::consensus::yac::YacCryptoProvider> yac_crypto_;
+
+    std::shared_ptr<FakePeerBehaviour> behaviour_;
 
     logger::Logger log_;
   };
