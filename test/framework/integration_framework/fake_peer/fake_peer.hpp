@@ -63,6 +63,7 @@ namespace integration_framework {
     class OgNetworkNotifier;
     class YacNetworkNotifier;
     class Behaviour;
+    class BlockStorage;
 
     /**
      * A lightweight implementation of iroha peer network interface for
@@ -112,6 +113,13 @@ namespace integration_framework {
 
       /// Assign the given behaviour to this fake peer.
       FakePeer &setBehaviour(const std::shared_ptr<Behaviour> &behaviour);
+
+      FakePeer &setBlockStorage(
+          const std::shared_ptr<BlockStorage> &block_storage);
+
+      FakePeer &removeBlockStorage();
+
+      boost::optional<const BlockStorage&> getBlockStorage() const;
 
       /// Start the fake peer.
       void run();
@@ -200,6 +208,7 @@ namespace integration_framework {
       std::shared_ptr<iroha::consensus::yac::YacCryptoProvider> yac_crypto_;
 
       std::shared_ptr<Behaviour> behaviour_;
+      std::shared_ptr<BlockStorage> block_storage_;
 
       logger::Logger log_;
     };
