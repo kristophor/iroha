@@ -82,6 +82,8 @@ namespace integration_framework {
       using OgProposalPtr = std::shared_ptr<shared_model::interface::Proposal>;
       using OsBatchPtr =
           std::shared_ptr<shared_model::interface::TransactionBatch>;
+      using LoaderBlockRequest = std::shared_ptr<shared_model::crypto::Hash>;
+      using LoaderBlocksRequest = shared_model::interface::types::HeightType;
 
       /**
        * Constructor.
