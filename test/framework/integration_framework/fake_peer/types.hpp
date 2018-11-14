@@ -43,9 +43,9 @@ namespace iroha {
   namespace consensus {
     namespace yac {
       class NetworkImpl;
-      class VoteMessage;
       class YacCryptoProvider;
       class YacHash;
+      struct VoteMessage;
     }  // namespace yac
     struct Round;
   }    // namespace consensus
