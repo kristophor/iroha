@@ -80,6 +80,13 @@ namespace integration_framework {
 
       boost::optional<const BlockStorage&> getBlockStorage() const;
 
+      FakePeer &setProposalStorage(
+          const std::shared_ptr<ProposalStorage> &proposal_storage);
+
+      FakePeer &removeProposalStorage();
+
+      boost::optional<const ProposalStorage &> getProposalStorage() const;
+
       /// Start the fake peer.
       void run();
 
@@ -177,6 +184,7 @@ namespace integration_framework {
 
       std::shared_ptr<Behaviour> behaviour_;
       std::shared_ptr<BlockStorage> block_storage_;
+      std::shared_ptr<ProposalStorage> proposal_storage_;
 
       logger::Logger log_;
     };
