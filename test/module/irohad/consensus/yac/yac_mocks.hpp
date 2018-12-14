@@ -255,7 +255,12 @@ namespace iroha {
         }
 
         void initYac(ClusterOrdering ordering) {
-          yac = Yac::create(YacVoteStorage(), network, crypto, timer, ordering);
+          yac = Yac::create(YacVoteStorage(),
+                            network,
+                            crypto,
+                            timer,
+                            ordering,
+                            logger::log("Yac"));
           network->subscribe(yac);
         }
       };

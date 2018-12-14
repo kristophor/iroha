@@ -79,7 +79,9 @@ class ToriiQueriesTest : public testing::Test {
 
     //----------- Server run ----------------
     initQueryFactory();
-    runner->append(std::make_unique<torii::QueryService>(qpi, query_factory))
+    runner
+        ->append(std::make_unique<torii::QueryService>(
+            qpi, query_factory, logger::log("QueryService")))
         .run()
         .match(
             [this](iroha::expected::Value<int> port) {

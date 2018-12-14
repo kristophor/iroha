@@ -36,7 +36,7 @@ namespace iroha {
   // ------------------------------| public api |-------------------------------
 
   MstState MstState::empty(const CompleterType &completer) {
-    return MstState(completer);
+    return MstState(completer, logger::log("MstState"));
   }
 
   StateUpdateResult MstState::operator+=(const DataType &rhs) {
@@ -59,7 +59,7 @@ namespace iroha {
 
   MstState MstState::operator-(const MstState &rhs) const {
     return MstState(this->completer_,
-                    set_difference(this->internal_state_, rhs.internal_state_));
+                    set_difference(this->internal_state_, rhs.internal_state_), this->log_);
   }
 
   bool MstState::operator==(const MstState &rhs) const {
@@ -125,16 +125,16 @@ namespace iroha {
     return inserted_new_signatures;
   }
 
-  MstState::MstState(const CompleterType &completer)
-      : MstState(completer, InternalStateType{}) {}
+  MstState::MstState(const CompleterType &completer, logger::Logger log)
+      : MstState(completer, InternalStateType{}, std::move(log)) {}
 
   MstState::MstState(const CompleterType &completer,
-                     const InternalStateType &transactions)
+                     const InternalStateType &transactions,
+                     logger::Logger log)
       : completer_(completer),
         internal_state_(transactions.begin(), transactions.end()),
-        index_(transactions.begin(), transactions.end()) {
-    log_ = logger::log("MstState");
-  }
+        index_(transactions.begin(), transactions.end()),
+        log_(std::move(log)) {}
 
   void MstState::insertOne(StateUpdateResult &state_update,
                            const DataType &rhs_batch) {

@@ -186,7 +186,8 @@ namespace iroha {
               std::move(pending_txs_storage),
               converter_,
               std::move(response_factory),
-              perm_converter_));
+              perm_converter_,
+              logger::log("PostgresQueryExecutor")));
     }
 
     bool StorageImpl::insertBlock(const shared_model::interface::Block &block) {

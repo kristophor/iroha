@@ -147,7 +147,11 @@ class ToriiServiceTest : public testing::Test {
     runner
         ->append(std::make_unique<torii::CommandServiceTransportGrpc>(
             std::make_shared<torii::CommandServiceImpl>(
-                tx_processor, storage, status_bus, status_factory),
+                tx_processor,
+                storage,
+                status_bus,
+                status_factory,
+                logger::log("CommandServiceImpl")),
             status_bus,
             initial_timeout,
             nonfinal_timeout,

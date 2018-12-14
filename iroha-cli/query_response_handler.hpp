@@ -45,7 +45,7 @@ namespace iroha_cli {
 
   class QueryResponseHandler {
    public:
-    QueryResponseHandler();
+    explicit QueryResponseHandler(std::shared_ptr<spdlog::logger> log);
 
     /**
      * Handle query response

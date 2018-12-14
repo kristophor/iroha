@@ -158,7 +158,11 @@ class ClientServerTest : public testing::Test {
     runner
         ->append(std::make_unique<torii::CommandServiceTransportGrpc>(
             std::make_shared<torii::CommandServiceImpl>(
-                tx_processor, storage, status_bus, status_factory),
+                tx_processor,
+                storage,
+                status_bus,
+                status_factory,
+                logger::log("CommandServiceImpl")),
             status_bus,
             initial_timeout,
             nonfinal_timeout,
@@ -167,7 +171,8 @@ class ClientServerTest : public testing::Test {
             batch_parser,
             batch_factory,
             logger::log("CommandServiceTransportGrpc")))
-        .append(std::make_unique<torii::QueryService>(qpi, query_factory))
+        .append(std::make_unique<torii::QueryService>(
+            qpi, query_factory, logger::log("QueryService")))
         .run()
         .match(
             [this](iroha::expected::Value<int> port) {

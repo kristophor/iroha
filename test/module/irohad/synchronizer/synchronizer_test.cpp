@@ -56,11 +56,13 @@ class SynchronizerTest : public ::testing::Test {
     ON_CALL(*block_query, getTopBlockHeight())
         .WillByDefault(Return(kHeight - 1));
 
-    synchronizer = std::make_shared<SynchronizerImpl>(consensus_gate,
-                                                      chain_validator,
-                                                      mutable_factory,
-                                                      block_query_factory,
-                                                      block_loader);
+    synchronizer =
+        std::make_shared<SynchronizerImpl>(consensus_gate,
+                                           chain_validator,
+                                           mutable_factory,
+                                           block_query_factory,
+                                           block_loader,
+                                           logger::log("synchronizer"));
   }
 
   std::shared_ptr<shared_model::interface::Block> makeCommit(

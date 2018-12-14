@@ -40,8 +40,8 @@ class ToriiQueryServiceTest : public ::testing::Test {
     //----------- Server run ----------------
     initQueryFactory();
     runner
-        ->append(std::make_unique<torii::QueryService>(query_processor,
-                                                       query_factory))
+        ->append(std::make_unique<torii::QueryService>(
+            query_processor, query_factory, logger::log("QueryService")))
         .run()
         .match(
             [this](iroha::expected::Value<int> port) {

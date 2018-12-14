@@ -28,7 +28,7 @@ namespace spdlog {
 namespace iroha_cli {
   class GrpcResponseHandler {
    public:
-    GrpcResponseHandler();
+    explicit GrpcResponseHandler(logger::Logger log);
     /**
      * Handle iroha GRPC TxResponse
      * @param response

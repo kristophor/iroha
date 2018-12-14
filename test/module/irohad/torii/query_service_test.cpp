@@ -56,8 +56,8 @@ class QueryServiceTest : public ::testing::Test {
   }
 
   void init() {
-    query_service =
-        std::make_shared<QueryService>(query_processor, query_factory);
+    query_service = std::make_shared<QueryService>(
+        query_processor, query_factory, logger::log("QueryService"));
   }
 
   std::unique_ptr<shared_model::interface::QueryResponse> getResponse() {

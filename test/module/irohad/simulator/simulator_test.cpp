@@ -71,7 +71,8 @@ class SimulatorTest : public ::testing::Test {
                                             factory,
                                             block_query_factory,
                                             crypto_signer,
-                                            std::move(block_factory));
+                                            std::move(block_factory),
+                                            logger::log("Simulator"));
   }
 
   consensus::Round round;

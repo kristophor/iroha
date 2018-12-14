@@ -87,7 +87,8 @@ class YacGateTest : public ::testing::Test {
                                          std::move(peer_orderer_ptr),
                                          hash_provider,
                                          block_creator,
-                                         block_cache);
+                                         block_cache,
+                                         logger::log("YacGate"));
   }
 
   iroha::consensus::Round round{1, 1};

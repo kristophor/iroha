@@ -192,7 +192,7 @@ void Irohad::initValidators() {
 void Irohad::initNetworkClient() {
   async_call_ =
       std::make_shared<network::AsyncGrpcClient<google::protobuf::Empty>>(
-          logger::log("AsyncGrpcClient"));
+          createLogger("AsyncGrpcClient"));
 }
 
 void Irohad::initFactories() {
@@ -308,7 +308,8 @@ void Irohad::initSimulator() {
                                           storage,
                                           storage,
                                           crypto_signer_,
-                                          std::move(block_factory));
+                                          std::move(block_factory),
+                                          createLogger("Simulator"));
 
   log_->info("[Init] => init simulator");
 }
@@ -352,8 +353,13 @@ void Irohad::initConsensusGate() {
  * Initializing synchronizer
  */
 void Irohad::initSynchronizer() {
-  synchronizer = std::make_shared<SynchronizerImpl>(
-      consensus_gate, chain_validator, storage, storage, block_loader);
+  synchronizer =
+      std::make_shared<SynchronizerImpl>(consensus_gate,
+                                         chain_validator,
+                                         storage,
+                                         storage,
+                                         block_loader,
+                                         createLogger("synchronizer"));
 
   log_->info("[Init] => synchronizer");
 }
@@ -427,7 +433,11 @@ void Irohad::initTransactionCommandService() {
                                                  status_factory,
                                                  createLogger("TxProcessor"));
   command_service = std::make_shared<::torii::CommandServiceImpl>(
-      tx_processor, storage, status_bus_, status_factory);
+      tx_processor,
+      storage,
+      status_bus_,
+      status_factory,
+      createLogger("CommandServiceImpl"));
   command_service_transport =
       std::make_shared<::torii::CommandServiceTransportGrpc>(
           command_service,
@@ -454,8 +464,8 @@ void Irohad::initQueryService() {
                                            query_response_factory_,
                                            createLogger("QueryProcessorImpl"));
 
-  query_service =
-      std::make_shared<::torii::QueryService>(query_processor, query_factory);
+  query_service = std::make_shared<::torii::QueryService>(
+      query_processor, query_factory, createLogger("QueryService"));
 
   log_->info("[Init] => query service");
 }

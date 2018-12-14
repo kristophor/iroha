@@ -99,7 +99,8 @@ namespace iroha {
             createNetwork(std::move(async_call)),
             createCryptoProvider(keypair, std::move(common_objects_factory)),
             createTimer(delay_milliseconds),
-            initial_order);
+            initial_order,
+            logger::log("Yac"));
       }
 
       std::shared_ptr<YacGate> YacInit::initConsensusGate(
@@ -129,7 +130,8 @@ namespace iroha {
                                              std::move(peer_orderer),
                                              hash_provider,
                                              block_creator,
-                                             std::move(consensus_result_cache));
+                                             std::move(consensus_result_cache),
+                                             logger::log("YacGate"));
       }
     }  // namespace yac
   }    // namespace consensus

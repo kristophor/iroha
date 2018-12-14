@@ -61,7 +61,7 @@ namespace iroha {
     virtual ~MstProcessor() = default;
 
    protected:
-    MstProcessor();
+    explicit MstProcessor(logger::Logger log);
 
     logger::Logger log_;
 

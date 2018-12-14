@@ -147,10 +147,11 @@ namespace iroha {
     using IndexType =
         std::priority_queue<DataType, std::vector<DataType>, Less>;
 
-    MstState(const CompleterType &completer);
+    MstState(const CompleterType &completer, logger::Logger log);
 
     MstState(const CompleterType &completer,
-             const InternalStateType &transactions);
+             const InternalStateType &transactions,
+             logger::Logger log);
 
     /**
      * Insert batch in own state and push it in out_completed_state or

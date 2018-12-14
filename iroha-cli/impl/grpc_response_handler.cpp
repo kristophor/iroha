@@ -21,8 +21,10 @@
 using namespace grpc;
 namespace iroha_cli {
 
-  GrpcResponseHandler::GrpcResponseHandler()
-      : log_(logger::log("GrpcResponseHandler")) {
+  GrpcResponseHandler::GrpcResponseHandler(logger::Logger log)
+      : tx_handler_{logger::log("TransactionResponseHandler")},
+        query_handler_{logger::log("QueryResponseHandler")},
+        log_(std::move(log)) {
     handler_map_[CANCELLED] = "Operation canceled";
     handler_map_[UNKNOWN] = "Unknown error";
     handler_map_[INVALID_ARGUMENT] = "INVALID_ARGUMENT";

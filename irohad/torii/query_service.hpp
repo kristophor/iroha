@@ -40,7 +40,8 @@ namespace torii {
             iroha::protocol::Query>;
 
     QueryService(std::shared_ptr<iroha::torii::QueryProcessor> query_processor,
-                 std::shared_ptr<QueryFactoryType> query_factory);
+                 std::shared_ptr<QueryFactoryType> query_factory,
+                 logger::Logger log);
 
     QueryService(const QueryService &) = delete;
     QueryService &operator=(const QueryService &) = delete;
