@@ -46,7 +46,8 @@ namespace iroha {
             *sql, logger::log("PostgresBlockIndex"));
         converter =
             std::make_shared<shared_model::proto::ProtoBlockJsonConverter>();
-        blocks = std::make_shared<PostgresBlockQuery>(*sql, *file, converter, logger::log("PostgresBlockQuery"));
+        blocks = std::make_shared<PostgresBlockQuery>(
+            *sql, *file, converter, logger::log("PostgresBlockQuery"));
 
         *sql << init_;
       }

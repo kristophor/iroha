@@ -446,7 +446,7 @@ namespace iroha_cli {
 
       provider_->sign(tx);
 
-      GrpcResponseHandler response_handler;
+      GrpcResponseHandler response_handler{logger::log("GrpcResponseHandler")};
       auto shared_tx = shared_model::proto::Transaction(
           iroha::model::converters::PbTransactionFactory().serialize(tx));
       response_handler.handle(

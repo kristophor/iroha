@@ -21,7 +21,8 @@ namespace iroha {
     void SetUp() override {
       ametsuchi::AmetsuchiTest::SetUp();
       validator = std::make_shared<validation::ChainValidatorImpl>(
-          std::make_shared<consensus::yac::SupermajorityCheckerImpl>());
+          std::make_shared<consensus::yac::SupermajorityCheckerImpl>(),
+          logger::log("ChainValidator"));
 
       for (size_t i = 0; i < 5; ++i) {
         keys.push_back(shared_model::crypto::DefaultCryptoAlgorithmType::
@@ -102,7 +103,8 @@ namespace iroha {
     auto createAndValidateChain(
         std::vector<std::shared_ptr<shared_model::interface::Block>> chain) {
       auto ms = createMutableStorage();
-      return validator->validateAndApply(rxcpp::observable<>::iterate(chain), *ms);
+      return validator->validateAndApply(rxcpp::observable<>::iterate(chain),
+                                         *ms);
     }
 
     std::shared_ptr<validation::ChainValidatorImpl> validator;

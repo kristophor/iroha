@@ -27,7 +27,8 @@ using ::testing::SaveArg;
 class ChainValidationTest : public ::testing::Test {
  public:
   void SetUp() override {
-    validator = std::make_shared<ChainValidatorImpl>(supermajority_checker);
+    validator = std::make_shared<ChainValidatorImpl>(
+        supermajority_checker, logger::log("ChainValidator"));
     storage = std::make_shared<MockMutableStorage>();
     query = std::make_shared<MockPeerQuery>();
     peers = std::vector<std::shared_ptr<shared_model::interface::Peer>>();

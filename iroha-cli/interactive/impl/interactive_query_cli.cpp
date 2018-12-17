@@ -278,7 +278,8 @@ namespace iroha_cli {
           shared_model::proto::Query(*iroha::model::converters::PbQueryFactory(
                                           logger::log("PbQueryFactory"))
                                           .serialize(query_));
-      GrpcResponseHandler{}.handle(client.sendQuery(query));
+      GrpcResponseHandler{logger::log("GrpcResponseHandler")}.handle(
+          client.sendQuery(query));
       printEnd();
       // Stop parsing
       return false;

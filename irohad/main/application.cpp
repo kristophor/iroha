@@ -181,7 +181,8 @@ void Irohad::initValidators() {
   stateful_validator = std::make_shared<StatefulValidatorImpl>(
       std::move(factory), batch_parser, createLogger("SFV"));
   chain_validator = std::make_shared<ChainValidatorImpl>(
-      std::make_shared<consensus::yac::SupermajorityCheckerImpl>());
+      std::make_shared<consensus::yac::SupermajorityCheckerImpl>(),
+      createLogger("ChainValidator"));
 
   log_->info("[Init] => validators");
 }

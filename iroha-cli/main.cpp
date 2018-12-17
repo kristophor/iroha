@@ -159,7 +159,8 @@ int main(int argc, char *argv[]) {
   // Send to Iroha Peer json transaction/query
   else if (not FLAGS_json_transaction.empty() or not FLAGS_json_query.empty()) {
     iroha_cli::CliClient client(FLAGS_peer_ip, FLAGS_torii_port);
-    iroha_cli::GrpcResponseHandler response_handler;
+    iroha_cli::GrpcResponseHandler response_handler{
+        logger::log("GrpcResponseHandler")};
     if (not FLAGS_json_transaction.empty()) {
       logger->info(
           "Send transaction to {}:{} ", FLAGS_peer_ip, FLAGS_torii_port);
